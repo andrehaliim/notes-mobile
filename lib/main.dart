@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/config.dart';
 import 'package:notes_app/login.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,11 +13,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Drrew Notes App',
-      home: Login(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ConfigModel())],
+      child: MaterialApp(
+        title: 'Drrew Notes App',
+        home: Login(),
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
-

@@ -1,6 +1,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:notes_app/alert.dart';
+import 'package:notes_app/config.dart';
+import 'package:notes_app/login_api.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     double maxWidth = MediaQuery.of(context).size.width;
     double maxHeight = MediaQuery.of(context).size.height;
+    ConfigModel configModel = Provider.of<ConfigModel>(context);
 
     return Scaffold(
       body: Container(
@@ -29,14 +34,24 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Container(
                   padding: const EdgeInsets.all(15),
-                  child: const Row(
+                  child:  Row(
                     children: [
-                      Text(
+                      const Text(
                         'Welcome back,\n{username}',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      Spacer(),
-                      IconButton(onPressed: null, icon: Icon(Icons.logout, color: Colors.black,))
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () async {
+                            try {
+                              final String message = await LoginApi().logout(configModel);
+                              Navigator.pop(context);
+                              Alert().showAlert(context, 'Logout', message);
+                            } catch (e) {
+                              print('Error: $e');
+                            }
+                          }
+                          , icon: const Icon(Icons.logout, color: Colors.black,))
                     ],
                   ),
                 ),
@@ -44,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                   width: maxWidth,
                   child: Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       IconButton(
                         icon: const Icon(CupertinoIcons.trash_circle_fill, color: Colors.red,),
                         iconSize: 30,
@@ -95,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,),
-                                      SizedBox(height: 10,),
+                                      const SizedBox(height: 10,),
                                       const Text("Lorem Ipsum is simply dummy text of the printing"
                                           " and typesetting industry. Lorem Ipsum has"
                                           " been the industry's standard dummy text"
@@ -110,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                                         style: TextStyle(
                                             fontSize: 11
                                         ),),
-                                      Spacer(),
+                                      const Spacer(),
                                       Container(
                                         child: const Text('26 Jan 2024',
                                             style: TextStyle(
